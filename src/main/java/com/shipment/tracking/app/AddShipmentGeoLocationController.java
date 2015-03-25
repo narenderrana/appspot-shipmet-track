@@ -4,6 +4,7 @@ package com.shipment.tracking.app;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Scanner;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.gson.Gson;
+import com.shipment.tracking.bean.Location;
 import com.shipment.tracking.bean.Shipment;
 
 public class AddShipmentGeoLocationController extends HttpServlet {
@@ -26,6 +28,7 @@ public class AddShipmentGeoLocationController extends HttpServlet {
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
+	 System.out.println("Get requested tracked");
 	response.setContentType("application/json");
 	Shipment shipment=new Shipment();
     if (fecthParams(request, shipment)) {
@@ -67,15 +70,25 @@ public class AddShipmentGeoLocationController extends HttpServlet {
 
 @Override
 public void doPost(HttpServletRequest request, HttpServletResponse response)  throws IOException{
-	doGet(  request,   response);
+	    System.out.println("Post requested tracked");
+	    StringBuilder stringBuilder = new StringBuilder(1000);
+	    Scanner scanner = new Scanner(request.getInputStream());
+	    while (scanner.hasNextLine()) {
+	        stringBuilder.append(scanner.nextLine());
+	    }
+	    String body = stringBuilder.toString();
+	    Location shipment=new Gson().fromJson(body, Location.class);
+	    request.setAttribute("latitude", shipment.getLocation().getLatitude());
+	    request.setAttribute("longitude", shipment.getLocation().getLongitude());
+	    doGet(  request,   response);
 }
 
 private boolean fecthParams(HttpServletRequest request,Shipment shipment){
 	try {
 		shipment.setTimestamp(new Date().getTime());
 		shipment.setShipmentId(Long.parseLong(request.getParameter("shipmentid")));
-		shipment.setLatitude(Double.parseDouble(request.getParameter("latitude")));
-		shipment.setLongitude(Double.parseDouble(request.getParameter("longitude")));
+		shipment.setLatitude(Double.parseDouble(request.getParameter("latitude")!=null?request.getParameter("latitude"):request.getAttribute("latitude").toString()));
+		shipment.setLongitude(Double.parseDouble(request.getParameter("longitude")!=null?request.getParameter("longitude"):request.getAttribute("longitude").toString()));
 	
 	} catch (Exception e) {
 		e.printStackTrace();
@@ -83,5 +96,10 @@ private boolean fecthParams(HttpServletRequest request,Shipment shipment){
 	}
 	
 	return true;
+}
+
+public static void main(String[] args) {
+	Location shipment=new Gson().fromJson("{\"location\":{\"latitude\":\"1212312\",\"longitude\":\"232132\",\"speed\":\"212\",\"bearing\":\"121\",\"altitude\":\"121\",\"recorded_at\":\"23213\"}}", Location.class);
+	System.out.println("Shipment"+shipment.getLocation());
 }
 }

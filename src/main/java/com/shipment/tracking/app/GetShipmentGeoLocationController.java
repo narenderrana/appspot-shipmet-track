@@ -32,7 +32,7 @@ public class GetShipmentGeoLocationController extends HttpServlet {
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
           {
-	try{
+	try{       
 	            Shipment shipment=new Shipment();
 	            response.setContentType("application/json");
 	            DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -76,6 +76,7 @@ public class GetShipmentGeoLocationController extends HttpServlet {
   }
 @Override
 public void doPost(HttpServletRequest request, HttpServletResponse response)  throws IOException {
+	 
 	doGet(  request,   response);
 }
 }
