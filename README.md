@@ -1,5 +1,5 @@
- 
- #Shipment Tracking Google clude code.
+
+#Shipment Tracking Google clude code.
  
  
 __1.Create account on https://cloud.google.com/appengine/__
@@ -10,9 +10,10 @@ __3.Use your admin console to go to your home page.You can manage you database f
 
 __4.API__
 
-  __Add Tracking__
+  __API to add geolocation of a device into database__
  
  __GET    /shipment/track/add__
+ 
  params 
     shipmentId
     timestamp
@@ -20,6 +21,15 @@ __4.API__
     latitude
  
 __POST /shipment/track/add__
+
  request body
  {location:{latitude:1212312,longitude:232132,speed:212,bearing:121,altitude:121,recorded_at:23213}}
-
+ 
+ __5.API to get store geolocation of a device.__
+   
+   __GET /shipment/track/get__
+   
+   parameter 
+        shipmentId
+   
+   
