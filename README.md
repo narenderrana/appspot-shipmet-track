@@ -14,11 +14,11 @@ __4.API__
  
  __GET    /shipment/track/add__
  
- params 
-    shipmentId
-    timestamp
-    longitude
-    latitude
+ params : 
+    shipmentId,
+    timestamp,
+    longitude,
+    latitude,
  
 __POST /shipment/track/add__
 
@@ -29,7 +29,7 @@ __POST /shipment/track/add__
    
    __GET /shipment/track/get__
    
-   parameter 
+   params:  
         shipmentId
    
    
